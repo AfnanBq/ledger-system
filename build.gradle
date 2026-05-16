@@ -27,6 +27,13 @@ dependencies {
     
     // Swagger UI library
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+	// Validation schemas 
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Lombok dependencies
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     
     // Testing libraries
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

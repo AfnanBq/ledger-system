@@ -8,14 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.app.model.dto.ledgerEntriesDto.LedgerEntryBasic;
 import com.example.app.model.entity.LedgerEntries;
-
 import java.util.Optional;
 import java.util.UUID;
 import java.math.BigDecimal;
 
 public interface LedgerEntriesRepository extends JpaRepository<LedgerEntries, Long> {
     // crud to return ledger based on id
-    Optional<LedgerEntries> findById(UUID id);
+    Optional<LedgerEntryBasic> findById(UUID id);
 
     // crud to return ledger based on account_id
     Page<LedgerEntryBasic> findByAccountId(UUID accountId, Pageable pageable);
@@ -33,5 +32,8 @@ public interface LedgerEntriesRepository extends JpaRepository<LedgerEntries, Lo
                 WHERE le.account.Id = :accountId
             """)
     BigDecimal calculateAccountBalance(@Param("accountId") UUID accountId);
+
+    // get ledger entry by accountId and transactionId
+    Optional<BigDecimal> findByAccountIdAndTransactionId(UUID accountId, UUID transactionId);
 
 }

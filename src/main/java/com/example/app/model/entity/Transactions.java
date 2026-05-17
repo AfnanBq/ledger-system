@@ -36,6 +36,9 @@ public class Transactions {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = true)
+    private UUID originalTransactionId;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

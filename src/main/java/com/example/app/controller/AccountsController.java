@@ -1,6 +1,6 @@
 package com.example.app.controller;
-
-import com.example.app.model.dto.AccountBasic;
+import com.example.app.model.dto.accountsDto.AccountWithBalance;
+import com.example.app.model.dto.ledgerEntriesDto.LedgerEntryBasic;
 import com.example.app.service.AccountsService;
 
 import java.util.UUID;
@@ -18,13 +18,17 @@ public class AccountsController {
     private AccountsService accountsService;
 
     @GetMapping("/{id}")
-    public AccountBasic findUserById(@PathVariable UUID id) {
+    public AccountWithBalance findUserById(@PathVariable UUID id) {
         return accountsService.getAccountById(id);
     }
 
     @GetMapping("/")
-    public Page<AccountBasic> getAllUsers(Pageable pageable) {
+    public Page<AccountWithBalance> getAllUsers(Pageable pageable) {
         return accountsService.getAllAccounts(pageable);
     }
 
+    @GetMapping("/{id}/ledger")
+    public Page<LedgerEntryBasic> getAccountLedger(@PathVariable UUID id, Pageable pageable) {
+        return accountsService.getAccountLedger(id, pageable);
+    }
 }

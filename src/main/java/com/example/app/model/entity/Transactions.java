@@ -11,13 +11,15 @@ import com.example.app.model.enums.TransactionType;
 import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "transactions")
 public class Transactions {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -37,10 +39,6 @@ public class Transactions {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Accounts account;
 
     @OneToMany(mappedBy = "transaction")
     private List<LedgerEntries> entries;

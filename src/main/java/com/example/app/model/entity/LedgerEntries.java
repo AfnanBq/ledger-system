@@ -9,13 +9,15 @@ import com.example.app.model.enums.EntryType;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "ledger_entries")
 public class LedgerEntries {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne

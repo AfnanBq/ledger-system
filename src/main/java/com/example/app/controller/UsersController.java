@@ -1,7 +1,7 @@
 package com.example.app.controller;
 
-import com.example.app.model.dto.CreateUserRequest;
-import com.example.app.model.dto.UserBasic;
+import com.example.app.model.dto.usersDto.CreateUserRequest;
+import com.example.app.model.dto.usersDto.UserBasic;
 import com.example.app.service.UsersService;
 
 import jakarta.validation.Valid;

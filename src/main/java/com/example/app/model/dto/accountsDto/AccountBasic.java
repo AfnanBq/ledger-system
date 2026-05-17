@@ -1,5 +1,4 @@
-package com.example.app.model.dto;
-
+package com.example.app.model.dto.accountsDto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,5 +20,6 @@ public record AccountBasic(
 
         @NotNull LocalDateTime updatedAt,
 
-        @NotNull Long user_id) {
+        @NotNull Long user_id
+    ) {
 }

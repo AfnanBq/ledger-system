@@ -1,7 +1,9 @@
-package com.example.app.model.dto;
+package com.example.app.model.dto.usersDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.example.app.model.dto.accountsDto.AccountBasic;
 
 import jakarta.validation.constraints.*;
 

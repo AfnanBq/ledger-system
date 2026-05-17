@@ -1,8 +1,8 @@
 package com.example.app.service;
 
-import com.example.app.model.dto.AccountBasic;
-import com.example.app.model.dto.CreateUserRequest;
-import com.example.app.model.dto.UserBasic;
+import com.example.app.model.dto.accountsDto.AccountBasic;
+import com.example.app.model.dto.usersDto.CreateUserRequest;
+import com.example.app.model.dto.usersDto.UserBasic;
 import com.example.app.model.entity.Users;
 import com.example.app.repository.UsersRepository;
 
@@ -30,7 +30,7 @@ public class UsersService {
         userEntity.setName(user.name());
         userEntity.setEmail(user.email());
         Users userRecord = usersRepository.save(userEntity);
-        AccountBasic accountRecord = accountsService.addAccount(userRecord);
+        AccountBasic accountRecord = accountsService.addAccount(userRecord, user.accountType());
         List<AccountBasic> accountDtos = List.of(accountRecord);
 
         return new UserBasic(userRecord.getId(), userRecord.getName(), userRecord.getEmail(), userRecord.getCreatedAt(),

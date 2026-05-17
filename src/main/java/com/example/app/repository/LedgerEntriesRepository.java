@@ -34,6 +34,6 @@ public interface LedgerEntriesRepository extends JpaRepository<LedgerEntries, Lo
     BigDecimal calculateAccountBalance(@Param("accountId") UUID accountId);
 
     // get ledger entry by accountId and transactionId
-    Optional<BigDecimal> findByAccountIdAndTransactionId(UUID accountId, UUID transactionId);
+    Optional<LedgerEntryBasic> findByAccountIdAndTransactionId(UUID accountId, UUID transactionId);
 
 }

@@ -10,6 +10,7 @@ import com.example.app.model.dto.ledgerEntriesDto.LedgerEntryBasic;
 import com.example.app.model.dto.transactionsDto.DepositRequest;
 import com.example.app.model.dto.transactionsDto.PaymentRequest;
 import com.example.app.model.dto.transactionsDto.RefundRequest;
+import com.example.app.model.dto.transactionsDto.SettlementRequest;
 import com.example.app.model.dto.transactionsDto.TransactionBasic;
 import com.example.app.model.dto.transactionsDto.TransferRequest;
 import com.example.app.model.entity.Accounts;
@@ -322,4 +323,66 @@ public class TransactionsService {
                 transaction.getRequestId(), transaction.getAmount(), transaction.getCreatedAt());
 
     }
+
+    @Transactional
+    public TransactionBasic settlement(SettlementRequest request) {
+        // check idempotency (transaction exists for same request_id)
+        Optional<TransactionBasic> existingTrx = transactionsRepository.findByRequestId(request.requestId());
+        if (existingTrx.isPresent()) {
+            return existingTrx.get();
+        }
+
+        // get merchant + settlement accounts
+        Accounts merchant = accountsRepository.findById(request.merchantAccountId())
+                .orElseThrow(() -> new EntityNotFoundException("Merchant account not found"));
+        Accounts settlementAccount = accountsRepository
+                .findByAccountType(AccountType.SETTLEMENT)
+                .orElseThrow(() -> new EntityNotFoundException("Settlement account not found"));
+
+        // get ledger entry for merchant and desired transaction
+        LedgerEntryBasic merchantEntry = ledgerEntriesRepository
+                .findByAccountIdAndTransactionId(merchant.getId(), request.transactionId())
+                .orElseThrow(() -> new EntityNotFoundException("Credit merchant entry not found"));
+
+        if (merchantEntry.entryType() != EntryType.CREDIT) {
+            throw new RuntimeException("Only credit entry can be settled");
+        }
+
+        // create transaction
+        Transactions transaction = new Transactions();
+        transaction.setType(TransactionType.SETTLEMENT);
+        transaction.setStatus(TransactionStatus.PENDING);
+        transaction.setAmount(merchantEntry.amount());
+        transaction.setRequestId(request.requestId());
+        transaction.setOriginalTransactionId(request.transactionId());
+        // preserve transaction in db
+        transaction = transactionsRepository.save(transaction);
+
+        // create ledger entries
+        // merchant debit
+        LedgerEntries merchantEntryTrx = new LedgerEntries();
+        merchantEntryTrx.setAccount(merchant);
+        merchantEntryTrx.setTransaction(transaction);
+        merchantEntryTrx.setAmount(merchantEntry.amount());
+        merchantEntryTrx.setEntryType(EntryType.DEBIT);
+
+        // settlement credit entry
+        LedgerEntries settlementEntry = new LedgerEntries();
+        settlementEntry.setAccount(settlementAccount);
+        settlementEntry.setTransaction(transaction);
+        settlementEntry.setAmount(merchantEntry.amount());
+        settlementEntry.setEntryType(EntryType.CREDIT);
+
+        // preserve records in the db
+        ledgerEntriesRepository.save(merchantEntryTrx);
+        ledgerEntriesRepository.save(settlementEntry);
+
+        // Mark transaction success
+        transaction.setStatus(TransactionStatus.SUCCESS);
+        transactionsRepository.save(transaction);
+        // return transaction record
+        return new TransactionBasic(transaction.getId(), transaction.getType(), transaction.getStatus(),
+                transaction.getRequestId(), transaction.getAmount(), transaction.getCreatedAt());
+    }
+
 }

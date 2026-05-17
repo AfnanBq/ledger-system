@@ -3,6 +3,7 @@ package com.example.app.controller;
 import com.example.app.model.dto.transactionsDto.DepositRequest;
 import com.example.app.model.dto.transactionsDto.PaymentRequest;
 import com.example.app.model.dto.transactionsDto.RefundRequest;
+import com.example.app.model.dto.transactionsDto.SettlementRequest;
 import com.example.app.model.dto.transactionsDto.TransactionBasic;
 import com.example.app.model.dto.transactionsDto.TransferRequest;
 import com.example.app.service.TransactionsService;
@@ -36,5 +37,9 @@ public class TransactionsController {
     public TransactionBasic refund(@Valid @RequestBody TransferRequest transfer) {
         return transactionsService.transfer(transfer);
     }
-    // POST /transactions/settlement
+
+    @PostMapping("/settlement")
+    public TransactionBasic settlement(@Valid @RequestBody SettlementRequest settlement) {
+        return transactionsService.settlement(settlement);
+    }
 }

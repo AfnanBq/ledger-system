@@ -1,8 +1,4 @@
-# Ledger System (Pre-Interview – VRTX Company)
-
-This project is a pre-interview task from **VRTX Company**, designed to showcase understanding of their tech stack and business logic in a ledger-based financial system.
-
----
+# Ledger System
 
 ## Getting Started
 
@@ -38,42 +34,4 @@ This system contains 3 main APIs:
 - Wallet → Wallet transfer
 - Account top-up (deposit)
 - Merchant → Settlement (temporary, for payouts to merchant bank accounts)
-
-### Task Achievements (Completed within 2 days)
-
-#### Core Requirements
-- Accounts (User, Merchant, Fees, Settlement) ✅
-- Double-entry ledger ✅
-- Immutable transactions ✅
-
-#### Supported Scenarios
-- Card payment (POS / contactless) ✅
-- Refund / Reversal ✅
-- Wallet transfer ✅
-- Merchant settlement ✅
-- Fees handling ✅
-
-#### Technical Constraints
-- Balanced transactions ✅
-- Idempotency via idempotency_key ✅
-- Concurrency handling ✅
-- Atomic operations ✅
-
-#### Advanced Requirements
-- Transaction linking ✅
-- Ledger-based balance calculation ✅
-- Concurrency safety ✅
-
-#### Required APIs
-- POST	/transactions/payment ✅
-- POST	/transactions/refund ✅
-- POST	/transactions/transfer ✅
-- POST	/transactions/settlement ✅
-- GET	/accounts/{id}/ledger ✅
-
-#### Deliverables
-- PostgreSQL schema ✅
-- Spring Boot REST APIs ✅
-- Transaction logic ✅
-- Edge case handling ✅
 
